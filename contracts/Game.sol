@@ -159,7 +159,8 @@ contract Game {
         uint256 fee = (totalPot * transactionFee) / 100;
     
         uint256 bonus = 0;
-        uint256 bonusRandomSeed = computeRandom() >> 128;
+        uint256 newRandom = uint256(keccak256(abi.encode(computeRandom(),block.prevrandao)));
+        uint256 bonusRandomSeed = newRandom >> 128;
         if (bonusRandomSeed % 100 < bonusFrequency) {
             bonus = (totalPot * bonusPercentage) / 100;
         }
@@ -207,4 +208,6 @@ contract Game {
             revert("No TimeOut Condition");
         }
     }
+
+    receive() external payable {}
 }
